@@ -1,5 +1,6 @@
 package com.killuazoldyck.rbk.taskone;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,8 +13,13 @@ public class MainActivity extends ActionBarActivity {
     Button button;
     TextView textView;
     private int count=0;
+    private String tag_index = "index";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(savedInstanceState!=null)
+        {
+        count=savedInstanceState.getInt(tag_index,0);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button = (Button)findViewById(R.id.button);
@@ -22,20 +28,22 @@ public class MainActivity extends ActionBarActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            count++;
-            textView.setText("This is the counter \nYou have pressed the buton "+count+" times");
+                count++;
+                textView.setText("This is the counter \nYou have pressed the buton "+count+" times");
             }
         });
     }
-
-
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState)
+    {
+    savedInstanceState.putInt(tag_index,count);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
