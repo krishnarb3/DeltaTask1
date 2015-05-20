@@ -1,6 +1,8 @@
 package com.killuazoldyck.rbk.taskone;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,29 +11,46 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+
 public class MainActivity extends ActionBarActivity {
     Button button;
     TextView textView;
-    private int count=0;
+    private int count = 0;
     private String tag_index = "index";
+    private String count1 = Integer.toString(count);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(savedInstanceState!=null)
-        {
-        count=savedInstanceState.getInt(tag_index,0);
-        }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        button = (Button)findViewById(R.id.button);
-        textView = (TextView)findViewById(R.id.Textview);
-        textView.setText("This is the counter \nYou have pressed the buton "+count+" times");
+        button = (Button) findViewById(R.id.button);
+        textView = (TextView) findViewById(R.id.Textview);
+        returninfo();
+        count = Integer.parseInt(count1);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 count++;
-                textView.setText("This is the counter \nYou have pressed the buton "+count+" times");
+                count1 = Integer.toString(count);
+                saveinfo();
+                returninfo();
             }
         });
+    }
+
+    public void saveinfo() {
+    SharedPreferences sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = sharedPref.edit();
+    editor.putString("Count",count1);
+    editor.apply();
+
+    }
+    public void returninfo() {
+    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+    count1 = sharedPref.getString("Count","0");
+    textView.setText("This is the counter \nYou have pressed the buton " + count1 + " times");
     }
     @Override
     protected void onSaveInstanceState(Bundle savedInstanceState)
